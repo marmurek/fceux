@@ -197,6 +197,7 @@ InputConfDialog_t::InputConfDialog_t(QWidget *parent)
 		nesPortComboxBox[i]->addItem(tr("Power Pad A"), SI_POWERPADA);
 		nesPortComboxBox[i]->addItem(tr("Power Pad B"), SI_POWERPADB);
 		nesPortComboxBox[i]->addItem(tr("Arkanoid Paddle"), SI_ARKANOID);
+		nesPortComboxBox[i]->addItem(tr("LCD Zapper (Advance)"), SI_LCDCOMP_ZAPPER);
 
 		for (int j = 0; j < nesPortComboxBox[i]->count(); j++)
 		{
@@ -320,7 +321,7 @@ void InputConfDialog_t::updatePortLabels(void)
 			}
 		}
 
-		nesPortConfButton[i]->setEnabled(curNesInput[i] == SI_GAMEPAD);
+		nesPortConfButton[i]->setEnabled(curNesInput[i] == SI_GAMEPAD || curNesInput[i] == SI_LCDCOMP_ZAPPER);
 	}
 
 	getInputSelection(2, &curNesInput[2], &usrNesInput[2]);
@@ -419,6 +420,9 @@ void InputConfDialog_t::openPortConfig(int portNum)
 		break;
 	case SI_GAMEPAD:
 		consoleWindow->openGamePadConfWin();
+		break;
+	case SI_LCDCOMP_ZAPPER: 
+		consoleWindow->openLcdCompZapperConfWin();
 		break;
 	}
 }

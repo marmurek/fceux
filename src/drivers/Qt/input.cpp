@@ -1629,6 +1629,36 @@ static void updateGamePadKeyMappings(void)
 	}
 }
 
+// Holds the button configurations for the LCD Compatible Zapper. 
+// Two collections of two buttons. 
+// One for each controller port.
+// The defaults shouldn't matter since this is intended to be configured by the user to match their custom hardware.
+ButtConfig lcdcompzappersc[2][2] = {
+	{
+		{ BUTTC_JOYSTICK, 0, 0, 0 }, { BUTTC_JOYSTICK, 0, 1, 0 }
+	},
+	{
+		{ BUTTC_JOYSTICK, 0, 0, 0 }, { BUTTC_JOYSTICK, 0, 1, 0 }
+	}
+};
+
+// buffer to hold the state of the zapper.
+static uint32 lcdcompzapperbuf[2];
+
+// Determines if the zapper trigger is pressed and/or if it's sensing light based on the button config and return
+// the result as a two bit value.
+static uint32 UpdateLCDCompatibleZapperData(int w)
+{
+	uint32 r = 0;
+	ButtConfig* lcdcompzappertsc = lcdcompzappersc[w];
+	int x;
+
+	for (x = 0; x < 2; x++)
+		if (DTestButton(&lcdcompzappertsc[x])) r |= 1 << x;
+
+	return r;
+}
+
 /**
  * Update all of the input devices required for the active game.
  */
@@ -1668,6 +1698,9 @@ void FCEUD_UpdateInput(void)
 		case SI_MOUSE:
 		case SI_SNES_MOUSE:
 			t |= 4;
+			break;
+		case SI_LCDCOMP_ZAPPER:
+			lcdcompzapperbuf[x] = UpdateLCDCompatibleZapperData(x);
 			break;
 		}
 	}
@@ -1791,6 +1824,9 @@ void InitInputInterface()
 		case SI_SNES_MOUSE:
 			InputDPtr = MouseRelative;
 			t |= 1;
+			break;
+		case SI_LCDCOMP_ZAPPER:
+			InputDPtr = &lcdcompzapperbuf[x];
 			break;
 		}
 		FCEUI_SetInput(x, (ESI)CurInputType[x], InputDPtr, attrib);
@@ -2246,6 +2282,9 @@ static const char *stdPortInputEncode(int v)
 	case SI_ARKANOID:
 		s = "SI_ARKANOID";
 		break;
+	case SI_LCDCOMP_ZAPPER:
+		s = "SI_LCDCOMP_ZAPPER";
+		break;
 	}
 	return s;
 }
@@ -2284,6 +2323,10 @@ static int stdPortInputDecode(const char *s)
 		else if (strcmp(s, "SI_ARKANOID") == 0)
 		{
 			ret = SI_ARKANOID;
+		}
+		else if (strcmp(s, "SI_LCDCOMP_ZAPPER") == 0)
+		{
+			ret = SI_LCDCOMP_ZAPPER;
 		}
 	}
 

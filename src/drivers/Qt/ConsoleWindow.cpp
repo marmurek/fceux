@@ -66,6 +66,7 @@
 #include "Qt/ConsoleWindow.h"
 #include "Qt/InputConf.h"
 #include "Qt/GamePadConf.h"
+#include "Qt/LcdCompZapperConf.h"
 #include "Qt/FamilyKeyboard.h"
 #include "Qt/HotKeyConf.h"
 #include "Qt/PaletteConf.h"
@@ -309,6 +310,7 @@ consoleWin_t::~consoleWin_t(void)
 	gameTimer->stop(); 
 
 	closeGamePadConfWindow();
+	closeLcdCompZapperConfWindow();
 
 	// The closeApp function call stops all threads.
 	// Calling quit on threads should not happen here. 
@@ -735,6 +737,7 @@ void consoleWin_t::closeEvent(QCloseEvent *event)
 {
 	//printf("Main Window Close Event\n");
 	closeGamePadConfWindow();
+	closeLcdCompZapperConfWindow();
 
 	event->accept();
 
@@ -2155,6 +2158,7 @@ void consoleWin_t::closeApp(void)
 	gameTimer->stop();
 
 	closeGamePadConfWindow();
+	closeLcdCompZapperConfWindow();
 
 	emulatorThread->quit();
 	emulatorThread->wait( 1000 );
@@ -2828,6 +2832,11 @@ void consoleWin_t::openGamePadConfWin(void)
 	//printf("Open GamePad Config Window\n");
 	
 	openGamePadConfWindow(this);
+}
+
+void consoleWin_t::openLcdCompZapperConfWin(void)
+{
+	openLcdCompZapperConfWindow(this);
 }
 
 void consoleWin_t::openGameSndConfWin(void)

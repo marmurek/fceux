@@ -316,6 +316,7 @@ class  consoleWin_t : public QMainWindow
 		void openDebugWindow(void);
 		void openHexEditor(void);
 		void openGamePadConfWin(void);
+		void openLcdCompZapperConfWin(void);
 		void toggleFullscreen(void);
 		void toggleMenuVis(void);
 		void recordMovie(void);
